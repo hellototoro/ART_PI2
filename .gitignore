@@ -1,0 +1,9 @@
+old/
+*test*/
+STM32CubeH7/
+*build/
+DynamicGraph/
+*.cache/
+*uvguix.*
+
+.codeartsdoer
