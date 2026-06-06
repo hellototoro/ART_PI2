@@ -1,0 +1,4 @@
+interface:
+  display_name: "Monitor Serial Data"
+  short_description: "Prepare Python and monitor serial data"
+  default_prompt: "Use $monitor-serial-data to prepare the serial Python environment and monitor data from a COM port."
