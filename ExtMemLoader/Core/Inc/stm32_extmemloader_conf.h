@@ -25,7 +25,7 @@
 #include "extmemloader_init.h"
 #include "stm32_extmem_conf.h"
 
-#define STM32EXTLOADER_DEVICE_MEMORY_ID       EXTMEMORY_1
+#define STM32EXTLOADER_DEVICE_MEMORY_ID       EXTMEMORY_2
 #define	STM32EXTLOADER_DEVICE_NAME            "art-pi2-extmem-loader"
 #define STM32EXTLOADER_DEVICE_TYPE            NOR_FLASH
 #define	STM32EXTLOADER_DEVICE_ADDR            0x70000000

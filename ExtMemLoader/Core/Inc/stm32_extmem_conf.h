@@ -70,7 +70,7 @@ enum {
 /*
   @brief management of the boot layer
 */
-#define EXTMEM_MEMORY_BOOTXIP  EXTMEMORY_1
+#define EXTMEM_MEMORY_BOOTXIP  EXTMEMORY_2
 
 /* USER CODE BEGIN EC */
 

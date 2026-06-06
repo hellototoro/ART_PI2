@@ -53,8 +53,8 @@
 
 /* USER CODE END INCLUDE */
 /* Private variables ---------------------------------------------------------*/
-extern XSPI_HandleTypeDef hxspi2;
 extern XSPI_HandleTypeDef hxspi1;
+extern XSPI_HandleTypeDef hxspi2;
 
 /* USER CODE BEGIN PV */
 
@@ -72,7 +72,7 @@ enum {
 /*
   @brief management of the boot layer
 */
-#define EXTMEM_MEMORY_BOOTXIP  EXTMEMORY_1
+#define EXTMEM_MEMORY_BOOTXIP  EXTMEMORY_2
 
 /* USER CODE BEGIN EC */
 

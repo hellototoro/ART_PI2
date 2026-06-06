@@ -79,11 +79,12 @@ if((CMAKE_C_STANDARD EQUAL 90) OR (CMAKE_C_STANDARD EQUAL 99))
     message(ERROR "Generated code requires C11 or higher")
 endif()
 
-
-
-
-
-
-
-
-
+add_custom_command(TARGET ${CMAKE_PROJECT_NAME}
+    POST_BUILD
+    COMMAND ${CMAKE_OBJCOPY} -O binary
+    ${LD_OPTIONS}
+    ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.elf
+    ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.bin
+    COMMENT "Generating ${CMAKE_PROJECT_NAME}.bin"
+    VERBATIM
+)

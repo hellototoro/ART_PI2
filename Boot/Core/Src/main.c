@@ -22,6 +22,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
+#include "w35t51nw.h"
 
 /* USER CODE END Includes */
 
@@ -65,6 +67,22 @@ static void MX_XSPI1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+#if defined(__ARMCC_VERSION)
+#include "retarget_stdout.h"
+#define PUTCHAR_PROTOTYPE int stdout_putchar(int ch)
+#else
+/* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
+   set to 'Yes') calls __io_putchar() */
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#endif /* __CC_ARM */
+
+PUTCHAR_PROTOTYPE {
+  /* Place your implementation of fputc here */
+  /* e.g. write a character to the USART1 and Loop until the end of transmission
+   */
+  HAL_UART_Transmit(&huart4, (uint8_t *)&ch, 1, 0xFFFF);
+  return ch;
+}
 
 /* USER CODE END 0 */
 
@@ -114,6 +132,14 @@ int main(void)
   MX_XSPI1_Init();
   MX_EXTMEM_MANAGER_Init();
   /* USER CODE BEGIN 2 */
+  printf("\r\n[BOOT] ART_PI2 W35T51NW XSPI2 bring-up\r\n");
+  W35T51NW_LowLevelProbe();
+  #if W35T51NW_SELF_TEST
+  {
+    W35T51NW_ExtFlashSelfTest();
+  }
+  #endif /* W35T51NW_SELF_TEST */
+  printf("[BOOT] Jump to application\r\n");
 
   /* USER CODE END 2 */
 

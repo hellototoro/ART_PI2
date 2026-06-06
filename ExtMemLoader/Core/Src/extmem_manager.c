@@ -65,14 +65,17 @@ void MX_EXTMEM_MANAGER_Init(void)
   /* Initialization of the memory parameters */
   memset(extmem_list_config, 0x0, sizeof(extmem_list_config));
 
-  /* EXTMEMORY_1 */
+  /* EXTMEMORY_2 */
   extmem_list_config[0].MemType = EXTMEM_NOR_SFDP;
   extmem_list_config[0].Handle = (void*)&hxspi2;
   extmem_list_config[0].ConfigType = EXTMEM_LINK_CONFIG_8LINES;
+  extmem_list_config[0].NorSfdpObject.sfdp_public.MaxFreq = 100 * 1000000u;
+  extmem_list_config[0].NorSfdpObject.sfdp_public.DtrReadDummyCycle = 16u;
 
-  EXTMEM_Init(EXTMEMORY_1, HAL_RCCEx_GetPeriphCLKFreq(RCC_PERIPHCLK_XSPI2));
+  EXTMEM_Init(EXTMEMORY_2, HAL_RCCEx_GetPeriphCLKFreq(RCC_PERIPHCLK_XSPI2));
 
   /* USER CODE BEGIN MX_EXTMEM_Init_PostTreatment */
+  extmem_list_config[0].NorSfdpObject.sfdp_private.SALObject.Commandbase.DummyCycles = 16u;
 
   /* USER CODE END MX_EXTMEM_Init_PostTreatment */
 }
