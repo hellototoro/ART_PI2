@@ -216,7 +216,7 @@ void HAL_XSPI_MspInit(XSPI_HandleTypeDef* hxspi)
   /** Initializes the peripherals clock
   */
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_XSPI2;
-    PeriphClkInit.Xspi2ClockSelection = RCC_XSPI2CLKSOURCE_PLL2S;
+    PeriphClkInit.Xspi2ClockSelection = RCC_XSPI2CLKSOURCE_PLL2T;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
     {
       Error_Handler();

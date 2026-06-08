@@ -93,8 +93,6 @@ void MX_EXTMEM_MANAGER_Init(void)
   extmem_list_config[1].MemType = EXTMEM_NOR_SFDP;
   extmem_list_config[1].Handle = (void*)&hxspi2;
   extmem_list_config[1].ConfigType = EXTMEM_LINK_CONFIG_8LINES;
-  extmem_list_config[1].NorSfdpObject.sfdp_public.MaxFreq = 100 * 1000000u;
-  extmem_list_config[1].NorSfdpObject.sfdp_public.DtrReadDummyCycle = 16u;
 
   EXTMEM_Init(EXTMEMORY_1, HAL_RCCEx_GetPeriphCLKFreq(RCC_PERIPHCLK_XSPI1));
   EXTMEM_Init(EXTMEMORY_2, HAL_RCCEx_GetPeriphCLKFreq(RCC_PERIPHCLK_XSPI2));

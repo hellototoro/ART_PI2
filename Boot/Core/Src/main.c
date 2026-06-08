@@ -134,6 +134,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
   printf("\r\n[BOOT] ART_PI2 W35T51NW XSPI2 bring-up\r\n");
   W35T51NW_LowLevelProbe();
+  #if W35T51NW_DDR_ENABLE
+  {
+    W35T51NW_EnableDdrXipMode();
+  }
+  #endif /* W35T51NW_DDR_ENABLE */
   #if W35T51NW_SELF_TEST
   {
     W35T51NW_ExtFlashSelfTest();
