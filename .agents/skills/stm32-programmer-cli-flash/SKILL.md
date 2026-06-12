@@ -7,6 +7,8 @@ description: Flash STM32 firmware with STM32_Programmer_CLI.exe over SWD/JTAG. U
 
 Use this skill to prepare and run STM32CubeProgrammer CLI commands for STM32 targets. Keep the workflow generic unless the current workspace clearly provides project-specific firmware paths, linker scripts, or external loaders.
 
+If the workspace `AGENTS.md` defines project-specific flashing parameters, artifact paths, addresses, or programming order, follow `AGENTS.md` first and use this skill as the execution and troubleshooting guide.
+
 ## Workflow
 
 1. Locate `STM32_Programmer_CLI.exe`:
@@ -46,6 +48,7 @@ Use this skill to prepare and run STM32CubeProgrammer CLI commands for STM32 tar
 5. Derive external download addresses from the active linker script or project configuration. Do not assume `0x90000000` or `0x70000000`; STM32 projects can map OSPI/XSPI/QSPI memories differently.
 
 6. Start or reset after programming only when appropriate for the board and boot flow. Use `--start` for normal run-after-download; add `-rst` or `-hardRst` when the target needs a reset to remap or boot from external memory.
+7. If the workspace includes an ExtMemLoader project that only emits an `.elf`, copy it to a `.stldr` file before using it with STM32CubeProgrammer.
 
 ## Command Patterns
 
@@ -76,19 +79,20 @@ Replace `0x90000000` with the external flash base from the active linker script 
 - If a workspace has an ExtMemLoader project but no `.stldr`, inspect its post-build script or copy the built loader ELF to a `.stldr` file in a writable location for CLI use.
 - If external programming fails while internal programming succeeds, check the loader path, download address, loader build configuration, external memory initialization, and whether the board needs hardware reset mode.
 
-## Current Workspace Example
+## Using Workspace Instructions
 
-For this ART_PI2 workspace only:
+When `AGENTS.md` provides project-specific guidance, use it to determine:
 
-- Boot ELF: `D:\workspaces\Embedded\Boards\ART_PI2\Boot\build\ART_PI2_Boot.elf`
-- Application BIN: `D:\workspaces\Embedded\Boards\ART_PI2\Appli\build\ART_PI2_Appli.bin`
-- Active application linker script: `Appli\stm32h7rsxx_RAMxspi1_ROMxspi2.ld`, with `__FLASH_BEGIN = 0x70000000`
-- ExtMemLoader ELF: `D:\workspaces\Embedded\Boards\ART_PI2\ExtMemLoader\build\ART_PI2_ExtMemLoader.elf`
+- Which artifacts to program
+- Whether to use ELF, HEX, or BIN
+- The external flash base address
+- The recommended reset and connection mode
+- The order for programming boot and application images
 
-ART_PI2 Boot programming command:
+If `AGENTS.md` mentions an external loader artifact but only an `.elf` exists, create the `.stldr` file before flashing:
 
 ```powershell
-STM32_Programmer_CLI.exe --connect port=swd --download "D:\workspaces\Embedded\Boards\ART_PI2\Boot\build\ART_PI2_Boot.elf" --start
+Copy-Item -LiteralPath path\to\ExtMemLoader.elf -Destination path\to\ExtMemLoader.stldr -Force
 ```
 
 ## Troubleshooting
@@ -97,3 +101,4 @@ STM32_Programmer_CLI.exe --connect port=swd --download "D:\workspaces\Embedded\B
 - If the target is locked or running code that disables debug, retry with `mode=UR reset=HWrst`.
 - If programming reports address or sector errors, confirm the image type and address. ELF/HEX usually do not need a manual address; BIN always does.
 - If verification fails, lower SWD frequency and retry, for example `--connect port=swd freq=1000`.
+- If external programming fails but internal programming succeeds, verify the loader was copied to `.stldr`, the external flash base address matches the workspace configuration, and the loader memory index matches its `extmem_list_config[]` slot.

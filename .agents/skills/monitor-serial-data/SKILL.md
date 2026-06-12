@@ -1,11 +1,13 @@
 ---
 name: monitor-serial-data
-description: Use when preparing a Python environment for serial-port work and monitoring UART/COM serial data with pyserial, especially in this STM32/embedded project. Handles checking or creating the project .venv, installing pyserial with uv when available or pip as fallback, and running a serial data monitor with port, baud rate, timeout, and optional log output.
+description: Use when preparing a Python environment for serial-port work and monitoring UART/COM serial data with pyserial, especially in this STM32/embedded project. Handles checking or creating the project .venv, installing pyserial with uv when available or pip as fallback, and running a serial data monitor with port, baud rate, timeout, duration, and optional log output.
 ---
 
 # Monitor Serial Data
 
 Use this skill to prepare the project Python environment and monitor serial data from a COM/UART port.
+
+For the current ART_PI2 workspace, verify the UART log port on the local machine before monitoring. The baud rate commonly used in this project is `115200`.
 
 ## Workflow
 
@@ -17,6 +19,7 @@ Use this skill to prepare the project Python environment and monitor serial data
 6. If `pyserial` is missing, install it with `uv pip install pyserial` when `uv` is available.
 7. If `uv` is not available, install it with `.venv\Scripts\python.exe -m pip install pyserial`.
 8. Run the serial monitor with `.venv\Scripts\python.exe .agents\skills\monitor-serial-data\scripts\monitor_serial.py`.
+9. When capturing boot logs, open the serial port first, then reset or start the target so the early boot banner is not missed.
 
 ## Environment Setup
 
@@ -46,16 +49,23 @@ Useful options:
 
 - `--port`: Serial port, such as `COM3`.
 - `--baud`: Baud rate. Default is `115200`.
-- `--timeout`: Read timeout in seconds. Default is `1.0`.
+- `--timeout`: Read timeout in seconds for each serial read. Default is `1.0`.
+- `--duration`: Optional total capture duration in seconds. When omitted, the monitor runs until `Ctrl+C`.
 - `--log`: Optional log file path. When set, received data is appended to the file.
 
 Example with logging:
 
 ```powershell
-.\.venv\Scripts\python.exe .\.agents\skills\monitor-serial-data\scripts\monitor_serial.py --port COM3 --baud 115200 --log serial.log
+.\.venv\Scripts\python.exe .\.agents\skills\monitor-serial-data\scripts\monitor_serial.py --port COM3 --baud 115200 --duration 8 --log serial.log
 ```
 
 Stop monitoring with `Ctrl+C`.
+
+Example for bounded ART_PI2 boot-log capture after opening the port:
+
+```powershell
+.\.venv\Scripts\python.exe .\.agents\skills\monitor-serial-data\scripts\monitor_serial.py --port COM3 --baud 115200 --duration 8
+```
 
 ## Troubleshooting
 
@@ -63,6 +73,9 @@ Stop monitoring with `Ctrl+C`.
 - If access is denied, close other serial terminals or debug tools using the same port.
 - If output is garbled, verify baud rate, parity, data bits, stop bits, and firmware UART settings.
 - If no data appears, confirm board power, firmware UART transmit path, cable orientation, and USB-UART driver status.
+- The serial port number is host-dependent. Do not assume `COM3`, `COM4`, or any fixed port across machines.
+- If the first boot lines are missing, open the serial port before issuing `--start`, hardware reset, or releasing reset from ST-LINK.
+- `--timeout` is a read timeout, not the total monitor runtime. Use `--duration` for fixed-length captures.
 
 ## Bundled Scripts
 

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -35,7 +36,12 @@ def parse_args() -> argparse.Namespace:
         "--timeout",
         type=float,
         default=1.0,
-        help="Read timeout in seconds. Default: 1.0.",
+        help="Read timeout in seconds for each serial read. Default: 1.0.",
+    )
+    parser.add_argument(
+        "--duration",
+        type=float,
+        help="Optional total capture duration in seconds.",
     )
     parser.add_argument(
         "--log",
@@ -58,21 +64,31 @@ def append_log(log_path: Path, text: str) -> None:
 
 def main() -> int:
     args = parse_args()
+    deadline = None if args.duration is None else time.monotonic() + args.duration
 
     try:
         with serial.Serial(args.port, args.baud, timeout=args.timeout) as ser:
             started = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             print(f"[{started}] Monitoring {args.port} at {args.baud} baud. Press Ctrl+C to stop.")
+            if args.duration is not None:
+                print(f"Capture duration: {args.duration:g} s")
             if args.log:
                 print(f"Appending received data to {args.log}")
 
             while True:
+                if deadline is not None and time.monotonic() >= deadline:
+                    print("\nCapture complete.")
+                    return 0
+
                 chunk = ser.read(ser.in_waiting or 1)
                 if not chunk:
                     continue
 
                 text = decode_chunk(chunk)
-                print(text, end="", flush=True)
+                try:
+                    print(text, end="", flush=True)
+                except OSError:
+                    return 0
                 if args.log:
                     append_log(args.log, text)
 
