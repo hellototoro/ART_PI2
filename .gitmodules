@@ -1,0 +1,6 @@
+[submodule "Middlewares/ST/STM32_ExtMem_Manager"]
+	path = Middlewares/ST/STM32_ExtMem_Manager
+	url = git@github.com:STMicroelectronics/stm32-mw-extmem-mgr.git
+[submodule "Middlewares/ST/STM32_ExtMem_Loader"]
+	path = Middlewares/ST/STM32_ExtMem_Loader
+	url = git@github.com:STMicroelectronics/stm32-mw-extmem-ldr.git

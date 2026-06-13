@@ -23,7 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
-#include "w35t51nw.h"
+#include "stm32_extmem_conf.h"
 
 /* USER CODE END Includes */
 
@@ -84,6 +84,13 @@ PUTCHAR_PROTOTYPE {
   return ch;
 }
 
+#if defined(EXTMEM_DEBUG_LEVEL) && (EXTMEM_DEBUG_LEVEL == 1)
+void EXTMEM_TRACE(uint8_t *Message)
+{
+  printf("%s", Message);
+}
+#endif
+
 /* USER CODE END 0 */
 
 /**
@@ -132,18 +139,6 @@ int main(void)
   MX_XSPI1_Init();
   MX_EXTMEM_MANAGER_Init();
   /* USER CODE BEGIN 2 */
-  printf("\r\n[BOOT] ART_PI2 W35T51NW XSPI2 bring-up\r\n");
-  W35T51NW_LowLevelProbe();
-  #if W35T51NW_DDR_ENABLE
-  {
-    W35T51NW_EnableDdrXipMode();
-  }
-  #endif /* W35T51NW_DDR_ENABLE */
-  #if W35T51NW_SELF_TEST
-  {
-    W35T51NW_ExtFlashSelfTest();
-  }
-  #endif /* W35T51NW_SELF_TEST */
   printf("[BOOT] Jump to application\r\n");
 
   /* USER CODE END 2 */

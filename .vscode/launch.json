@@ -1,0 +1,36 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Boot: Build & Debug ST-Link",
+            "cwd": "${workspaceFolder}",
+            "type": "cortex-debug",
+            "executable": "${command:cmake.launchTargetPath}",
+            // Let CMake extension decide executable: "${command:cmake.launchTargetPath}"
+            // Or fixed file path: "${workspaceFolder}/path/to/filename.elf"
+            "request": "launch",
+            "servertype": "stlink",
+            "device": "STM32H7R7L8HxH", //MCU used
+            "interface": "swd",
+            "serialNumber": "",        //Set ST-Link ID if you use multiple at the same time
+            "runToEntryPoint": "main",
+            "svdFile": "${STM32_PRG_PATH}/../SVD/STM32H7R.svd",
+            "v1": false,               //Change it depending on ST Link version
+            "serverpath": "C:\\Program Files (x86)\\STMicroelectronics\\stlink_server", //可执行文件路径
+            "stm32cubeprogrammer":"${STM32_PRG_PATH}", //可执行文件目录
+            "stlinkPath": "C:\\Program Files (x86)\\STMicroelectronics\\stlink_server", //可执行文件路径
+            "armToolchainPath": "${GNUARMEMB_TOOLCHAIN_PATH}/bin", //可执行文件目录
+            "gdbPath":"${GNUARMEMB_TOOLCHAIN_PATH}/bin/arm-none-eabi-gdb", //可执行文件路径
+            "serverArgs": [
+                "-m","1",
+                /* If you use external loader, add additional arguments */
+                //"serverArgs": ["--extload", "path/to/ext/loader.stldr"],
+            ],
+            //"preLaunchTask": "Build + Flash"
+            "showDevDebugOutput": "raw"
+        }
+    ]
+}

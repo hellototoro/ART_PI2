@@ -79,11 +79,12 @@ if((CMAKE_C_STANDARD EQUAL 90) OR (CMAKE_C_STANDARD EQUAL 99))
     message(ERROR "Generated code requires C11 or higher")
 endif()
 
-
-
-
-
-
-
-
-
+# copy the elf as stldr to the output directory
+add_custom_command(TARGET ${CMAKE_PROJECT_NAME}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+        $<TARGET_FILE:${CMAKE_PROJECT_NAME}>
+        ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.stldr
+    COMMENT "Generating ${CMAKE_PROJECT_NAME}.stldr"
+    VERBATIM
+)
