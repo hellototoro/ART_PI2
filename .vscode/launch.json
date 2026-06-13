@@ -5,32 +5,21 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Boot: Build & Debug ST-Link",
+            "name": "Boot: Build & Debug pyOCD",
             "cwd": "${workspaceFolder}",
             "type": "cortex-debug",
-            "executable": "${command:cmake.launchTargetPath}",
-            // Let CMake extension decide executable: "${command:cmake.launchTargetPath}"
-            // Or fixed file path: "${workspaceFolder}/path/to/filename.elf"
+            "executable": "${workspaceFolder}/Boot/build/ART_PI2_Boot.elf",
             "request": "launch",
-            "servertype": "stlink",
-            "device": "STM32H7R7L8HxH", //MCU used
+            "servertype": "pyocd",
             "interface": "swd",
-            "serialNumber": "",        //Set ST-Link ID if you use multiple at the same time
             "runToEntryPoint": "main",
-            "svdFile": "${STM32_PRG_PATH}/../SVD/STM32H7R.svd",
-            "v1": false,               //Change it depending on ST Link version
-            "serverpath": "C:\\Program Files (x86)\\STMicroelectronics\\stlink_server", //可执行文件路径
-            "stm32cubeprogrammer":"${STM32_PRG_PATH}", //可执行文件目录
-            "stlinkPath": "C:\\Program Files (x86)\\STMicroelectronics\\stlink_server", //可执行文件路径
-            "armToolchainPath": "${GNUARMEMB_TOOLCHAIN_PATH}/bin", //可执行文件目录
-            "gdbPath":"${GNUARMEMB_TOOLCHAIN_PATH}/bin/arm-none-eabi-gdb", //可执行文件路径
-            "serverArgs": [
-                "-m","1",
-                /* If you use external loader, add additional arguments */
-                //"serverArgs": ["--extload", "path/to/ext/loader.stldr"],
-            ],
-            //"preLaunchTask": "Build + Flash"
-            "showDevDebugOutput": "raw"
+            "svdFile": "${env:STM32_PRG_PATH}/../SVD/STM32H7R.svd",
+            "serverpath": "${workspaceFolder}/.venv/Scripts/pyocd.exe",
+            "toolchainPrefix": "arm-none-eabi",
+            "overrideGDBServerStartedRegex": "GDB server listening on port\\s+\\d+",
+            "showDevDebugOutput": "raw",
+            "targetId": "STM32H7R7L8HxH",
+            "cmsisPack": "${workspaceFolder}/debug/Keil.STM32H7RSxx_DFP.1.1.0.pack"
         }
     ]
 }

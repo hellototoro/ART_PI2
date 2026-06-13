@@ -148,52 +148,6 @@ enum
 extern EXTMEM_DefinitionTypeDef extmem_list_config[2];
 #if defined(EXTMEM_C)
 EXTMEM_DefinitionTypeDef extmem_list_config[2];
-// EXTMEM_DefinitionTypeDef extmem_list_config[2] =
-// {
-// #if defined(EXTMEM_DRIVER_PSRAM) && (EXTMEM_DRIVER_PSRAM == 1)
-//   /* EXTMEMORY_1 */
-//   {
-//     .MemType = EXTMEM_PSRAM,
-//     .Handle = (void *) &hxspi1,
-//     .ConfigType = EXTMEM_LINK_CONFIG_16LINES,
-//     .PsramObject =
-//     {
-//       .psram_public =
-//       {
-//         .MemorySize = HAL_XSPI_SIZE_256MB,
-//         .FreqMax = 200 * 1000000u,
-//         .NumberOfConfig = 1u,
-//         /* Config */
-//         {
-//           {.WriteMask = 0x4000u, .WriteValue = 0x4000u, .REGAddress = 0x08u},
-//         },
-//         /* Memory command configuration */
-//         .ReadREG           = 0x40u,
-//         .WriteREG          = 0xC0u,
-//         .ReadREGSize       = 2u,
-//         .REG_DummyCycle    = 4u,
-//         .Write_command     = 0xA0u,
-//         .Write_DummyCycle  = 4u,
-//         .Read_command      = 0x20u,
-//         .WrapRead_command  = 0x00u,
-//         .Read_DummyCycle   = 4u,
-//       }
-//     }
-//   },
-// #endif /* EXTMEM_DRIVER_PSRAM == 1 */
-// #if defined(EXTMEM_DRIVER_NOR_SFDP) && (EXTMEM_DRIVER_NOR_SFDP == 1)
-//   /* EXTMEMORY_2 */
-//   {
-//     .MemType = EXTMEM_NOR_SFDP,
-//     .Handle = (void *) &hxspi2,
-//     .ConfigType = EXTMEM_LINK_CONFIG_8LINES,
-//     .NorSfdpObject =
-//     {
-//       .sfdp_public.MaxFreq = EXTMEM_DEFAULT_MAX_CLOCK_FREQ,
-//     }
-//   }
-// #endif /* EXTMEM_DRIVER_NOR_SFDP == 1 */
-// };
 #endif /* EXTMEM_C */
 
 /**
