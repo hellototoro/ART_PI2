@@ -225,6 +225,14 @@ SECTIONS
   } >RAM
   PROVIDE( __non_tls_bss_start = ADDR(.bss) );
 
+  .extram_bss (NOLOAD) : ALIGN(32)
+  {
+    . = ALIGN(32);
+    *(.extram_bss)
+    *(.extram_bss*)
+    . = ALIGN(32);
+  } >EXTRAM
+
   PROVIDE( __bss_start = __tbss_start );
   PROVIDE( __bss_size = __bss_end - __bss_start );
 

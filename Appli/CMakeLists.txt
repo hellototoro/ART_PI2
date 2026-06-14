@@ -51,14 +51,27 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
 # Enable CMake support for ASM and C languages
 enable_language(C ASM)
 
+# 添加 LVGL 子模块
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+set(CMAKE_POLICY_DEFAULT_CMP0126 NEW)
+set(CONFIG_LV_BUILD_DEMOS ON)
+set(CONFIG_LV_BUILD_EXAMPLES OFF)
+set(LV_BUILD_CONF_PATH "${CMAKE_SOURCE_DIR}/../Bsp/lvgl/lv_conf.h")
+add_subdirectory(${CMAKE_SOURCE_DIR}/../Middlewares/lvgl/lvgl ${CMAKE_BINARY_DIR}/lvgl)
+target_link_libraries(lvgl PUBLIC stm32cubemx)
+
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
+    ${CMAKE_SOURCE_DIR}/../Bsp/lvgl
+    ${CMAKE_SOURCE_DIR}/../MyDrivers/ili9481
 )
 
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
+    ${CMAKE_SOURCE_DIR}/../Bsp/lvgl/lv_port_disp.c
+    ${CMAKE_SOURCE_DIR}/../MyDrivers/ili9481/ili9481.c
 )
 
 # Link directories setup
@@ -67,8 +80,9 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 )
 
 # Add linked libraries
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
+target_link_libraries(${CMAKE_PROJECT_NAME}
     # Add user defined libraries
+    lvgl
 )
 
 # Remove wrong libob.a library dependency when using cpp files

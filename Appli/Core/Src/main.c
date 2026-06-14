@@ -22,6 +22,9 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
+#include "lvgl.h"
+#include "lv_port_disp.h"
+#include "demos/lv_demos.h"
 
 /* USER CODE END Includes */
 
@@ -51,6 +54,7 @@ LTDC_HandleTypeDef hltdc;
 UART_HandleTypeDef huart4;
 
 /* USER CODE BEGIN PV */
+static uint32_t last_heartbeat_ms;
 
 /* USER CODE END PV */
 
@@ -129,6 +133,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
   printf("\r\n[APPLI] ART_PI2 application running from external flash\r\n");
   printf("[APPLI] VTOR=0x%08lX\r\n", SCB->VTOR);
+  lv_init();
+  lv_port_disp_init();
+
+  lv_demo_benchmark();
+
 
   /* USER CODE END 2 */
 
@@ -136,9 +145,16 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    HAL_GPIO_TogglePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin);
-    printf("[APPLI] heartbeat\r\n");
-    HAL_Delay(1000U);
+    lv_timer_handler();
+
+    if ((HAL_GetTick() - last_heartbeat_ms) >= 1000U)
+    {
+      last_heartbeat_ms = HAL_GetTick();
+      HAL_GPIO_TogglePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin);
+      printf("[APPLI] heartbeat\r\n");
+    }
+
+    HAL_Delay(5U);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

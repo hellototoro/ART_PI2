@@ -4,3 +4,7 @@
 [submodule "Middlewares/ST/STM32_ExtMem_Loader"]
 	path = Middlewares/ST/STM32_ExtMem_Loader
 	url = git@github.com:STMicroelectronics/stm32-mw-extmem-ldr.git
+[submodule "Middlewares/lvgl/lvgl"]
+	path = Middlewares/lvgl/lvgl
+	url = git@github.com:lvgl/lvgl.git
+	branch = release/v9.5
